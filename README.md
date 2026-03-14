@@ -1,5 +1,15 @@
 # ARC Network DApp
 
+---
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Discord](https://img.shields.io/discord/YOUR_DISCORD_ID?color=5865F2&label=Discord&logo=discord)](https://discord.gg/arc-network)
+[![Twitter](https://img.shields.io/twitter/follow/arc_network?style=social)](https://x.com/arc_network)
+[![GitHub Stars](https://img.shields.io/github/stars/arc-network/arc-ecosystem?style=social)](https://github.com/arc-network)
+[![Docs](https://img.shields.io/badge/Docs-Arc%20Network-blue)](https://docs.arc.network/)
+
+---
+
 ARC Network için geliştirilmiş bir Decentralized Application (DApp). Bu uygulama, ArcToken akıllı kontratını Ethereum ağında deploy etmek, yönetmek ve etkileşimde bulunmak için tasarlanmıştır.
 
 ## Özellikler
