@@ -10,19 +10,19 @@
 
 ---
 
-ARC Network için geliştirilmiş bir Decentralized Application (DApp). Bu uygulama, ArcToken akıllı kontratını Ethereum ağında deploy etmek, yönetmek ve etkileşimde bulunmak için tasarlanmıştır.
+A Decentralized Application (DApp) developed for the ARC Network. This application is designed to deploy, manage, and interact with the ArcToken smart contract on the Ethereum network.
 
-## Özellikler
+## Features
 
-- **Wallet Bağlantısı**: MetaMask veya diğer Web3 cüzdanlarını bağlayın
-- **Kontrat Deployment**: ArcToken akıllı kontratını ağa deploy edin
-- **Token Etkileşimi**: Token mint, transfer ve diğer işlemler
-- **Transaction Geçmişi**: Tüm işlemlerinizi takip edin
-- **Gerçek Zamanlı Güncellemeler**: Blok numarası ve kontrat olaylarını izleyin
-- **Çok Dilli Destek**: İngilizce ve Türkçe arayüz
-- **Matrix Rain Efekti**: Görsel efektlerle modern bir deneyim
+- **Wallet Connection**: Connect MetaMask or other Web3 wallets
+- **Contract Deployment**: Deploy the ArcToken smart contract to the network
+- **Token Interaction**: Mint tokens, transfer, and perform other operations
+- **Transaction History**: Track all your transactions
+- **Real-time Updates**: Monitor block number and contract events
+- **Multi-language Support**: English and Turkish interface
+- **Matrix Rain Effect**: Modern experience with visual effects
 
-## Teknolojiler
+## Technologies
 
 - **Frontend**: React 19, Vite
 - **Blockchain**: Ethereum, Solidity
@@ -31,60 +31,60 @@ ARC Network için geliştirilmiş bir Decentralized Application (DApp). Bu uygul
 - **Styling**: CSS Modules
 - **Linting**: ESLint
 
-## Kurulum
+## Installation
 
-1. Projeyi klonlayın:
+1. Clone the project:
    ```bash
    git clone https://github.com/Kewe63/ARC-Network-DApp.git
    cd arc
    ```
 
-2. Bağımlılıkları yükleyin:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Geliştirme sunucusunu başlatın:
+3. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Tarayıcınızda `http://localhost:5173` adresine gidin.
+4. Open `http://localhost:5173` in your browser.
 
-## Kullanım
+## Usage
 
-1. Web3 cüzdanınızı (örneğin MetaMask) bağlayın
-2. Ağ seçin (mainnet, testnet, vb.)
-3. ArcToken kontratını deploy edin
-4. Token işlemlerini gerçekleştirin
-5. Transaction geçmişini görüntüleyin
+1. Connect your Web3 wallet (e.g., MetaMask)
+2. Select a network (mainnet, testnet, etc.)
+3. Deploy the ArcToken contract
+4. Perform token operations
+5. View transaction history
 
 ## Build
 
-Üretim için build almak için:
+To build for production:
 ```bash
 npm run build
 ```
 
 ## Lint
 
-Kod kalitesini kontrol etmek için:
+To check code quality:
 ```bash
 npm run lint
 ```
 
-## Katkıda Bulunma
+## Contributing
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit edin (`git commit -m 'Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing-feature`)
-5. Pull Request açın
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Lisans
+## License
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+This project is licensed under the MIT License.
 
-## İletişim
+## Contact
 
-Sorularınız için GitHub Issues kullanın.
+For questions, use GitHub Issues.
