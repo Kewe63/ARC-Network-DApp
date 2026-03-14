@@ -1,0 +1,109 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+}
+
+.header-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.5);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(0, 255, 65, 0.5); }
+  50%       { box-shadow: 0 0 4px var(--accent), 0 0 8px rgba(0, 255, 65, 0.3); }
+}
+
+.header-nav {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-nav a {
+  color: var(--text-secondary);
+  text-shadow: none;
+  transition: all 0.15s;
+}
+.header-nav a::before { content: '[ '; }
+.header-nav a::after  { content: ' ]'; }
+.header-nav a:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  text-decoration: none;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  text-shadow: none;
+  transition: all 0.15s;
+}
+.github-link::before { content: none; }
+.github-link::after  { content: none; }
+.github-link:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  text-decoration: none;
+}
+.github-link svg {
+  flex-shrink: 0;
+  transition: filter 0.15s;
+}
+.github-link:hover svg {
+  filter: drop-shadow(0 0 4px rgba(0, 255, 65, 0.6));
+}
+
+.lang-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.lang-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+}
