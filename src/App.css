@@ -510,3 +510,65 @@ code {
   gap: 0.5rem;
 }
 
+/* ── Responsive tweaks (mobile) ── */
+@media (max-width: 640px) {
+  .app {
+    padding: 0 1rem 5rem;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .header-nav {
+    order: 2;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .header-logo {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.95rem;
+  }
+
+  .card {
+    padding: 1.25rem 1rem;
+  }
+
+  .btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.75rem;
+  }
+
+  .input-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-row .input {
+    width: 100%;
+  }
+
+  .main-grid {
+    gap: 1rem;
+  }
+
+  .terminal-body {
+    margin: 0;
+  }
+
+  .statusbar {
+    bottom: 1rem;
+    padding: 0.5rem 0.75rem;
+    width: calc(100% - 1.5rem);
+  }
+
+  .modal-box {
+    max-width: calc(100% - 2rem);
+  }
+}
+

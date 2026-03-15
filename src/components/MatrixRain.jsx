@@ -14,7 +14,9 @@ export default function MatrixRain() {
     resize()
     window.addEventListener('resize', resize)
 
-    const fontSize = 14
+    const isMobile = window.matchMedia('(pointer: coarse), (max-width: 640px)').matches
+    const fontSize = isMobile ? 10 : 14
+    const intervalMs = isMobile ? 80 : 50
     const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'
     let columns = Math.floor(canvas.width / fontSize)
     let drops = Array(columns).fill(1)
@@ -41,7 +43,7 @@ export default function MatrixRain() {
       }
     }
 
-    const interval = setInterval(draw, 50)
+    const interval = setInterval(draw, intervalMs)
     return () => {
       clearInterval(interval)
       window.removeEventListener('resize', resize)
