@@ -88,3 +88,8 @@ This project is licensed under the MIT License.
 ## Contact
 
 For questions, use GitHub Issues.
+
+---
+
+- Built with ❤️ for the ARC NETWORK community.
+
