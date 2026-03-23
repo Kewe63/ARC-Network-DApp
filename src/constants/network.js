@@ -74,3 +74,25 @@ export const ARCSCAN_ADDRESS_URL = (address) =>
   `https://testnet.arcscan.app/address/${address}`
 
 export const FAUCET_URL = 'https://faucet.circle.com'
+
+// ── ERC-8004 AI Agent Kit ──────────────────────────────────────────────────
+export const IDENTITY_REGISTRY   = '0x8004A818BFB912233c491871b3d84c89A494BD9e'
+export const REPUTATION_REGISTRY = '0x8004B663056A597Dffe9eCcC1965A193B7388713'
+export const VALIDATION_REGISTRY = '0x8004Cb1BF31DAf7788923b405b754f57acEB4272'
+
+export const IDENTITY_ABI = [
+  'function register(string metadataURI) returns (uint256)',
+  'function ownerOf(uint256 tokenId) view returns (address)',
+  'function tokenURI(uint256 tokenId) view returns (string)',
+  'event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)',
+]
+
+export const REPUTATION_ABI = [
+  'function giveFeedback(uint256 agentId, int128 score, uint8 category, string tag, string context, string model, string version, bytes32 feedbackHash)',
+]
+
+export const VALIDATION_ABI = [
+  'function validationRequest(address validator, uint256 agentId, string requestURI, bytes32 requestHash)',
+  'function validationResponse(bytes32 requestHash, uint8 response, string responseURI, bytes32 responseHash, string tag)',
+  'function getValidationStatus(bytes32 requestHash) view returns (address validatorAddress, uint256 agentId, uint8 response, bytes32 responseHash, string tag, uint256 lastUpdate)',
+]

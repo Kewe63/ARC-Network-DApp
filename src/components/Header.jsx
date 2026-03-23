@@ -2,6 +2,20 @@ import { FAUCET_URL } from '../constants/network'
 import { useLang } from '../i18n/LangContext'
 import './Header.css'
 
+const LANG_OPTIONS = [
+  { code: 'tr', label: 'TR' },
+  { code: 'en', label: 'EN' },
+  { code: 'zh', label: '中文' },
+  { code: 'ja', label: '日本語' },
+  { code: 'hi', label: 'हिं' },
+  { code: 'ru', label: 'RU' },
+  { code: 'pt', label: 'PT' },
+  { code: 'es', label: 'ES' },
+  { code: 'de', label: 'DE' },
+  { code: 'fr', label: 'FR' },
+  { code: 'ar', label: 'عر' },
+]
+
 export default function Header() {
   const { lang, setLang, t } = useLang()
   return (
@@ -49,12 +63,16 @@ export default function Header() {
           </svg>
           Discord
         </a>
-        <button
-          className="lang-toggle"
-          onClick={() => setLang(lang === 'tr' ? 'en' : 'tr')}
+
+        <select
+          className="lang-select"
+          value={lang}
+          onChange={e => setLang(e.target.value)}
         >
-          {lang === 'tr' ? 'EN' : 'TR'}
-        </button>
+          {LANG_OPTIONS.map(o => (
+            <option key={o.code} value={o.code}>{o.label}</option>
+          ))}
+        </select>
       </nav>
     </header>
   )

@@ -89,21 +89,32 @@
   filter: drop-shadow(0 0 4px rgba(0, 255, 65, 0.6));
 }
 
-.lang-toggle {
-  background: transparent;
+.lang-select {
+  background: var(--bg-input);
   border: 1px solid var(--border);
   color: var(--text-secondary);
   font-family: var(--mono);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.4rem;
   cursor: pointer;
   transition: all 0.15s;
-  text-transform: uppercase;
+  outline: none;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+  min-width: 3.2rem;
 }
-.lang-toggle:hover {
+.lang-select:hover,
+.lang-select:focus {
   border-color: var(--accent);
   color: var(--accent);
   box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+}
+.lang-select option {
+  background: #000d00;
+  color: var(--text-primary);
+  font-family: var(--mono);
 }

@@ -1,7 +1,8 @@
 import { createContext, useContext, useState } from 'react'
-import { tr, en } from './strings'
+import { tr, en, zh, ja, hi, ru, pt, es, de, fr, ar } from './strings'
 
-const langs = { tr, en }
+const langs = { tr, en, zh, ja, hi, ru, pt, es, de, fr, ar }
+
 const LangContext = createContext()
 
 export function LangProvider({ children }) {

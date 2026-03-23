@@ -5,6 +5,7 @@ import Header                 from './components/Header'
 import WalletPanel            from './components/WalletPanel'
 import DeployPanel            from './components/DeployPanel'
 import InteractionPanel       from './components/InteractionPanel'
+import AgentPanel             from './components/AgentPanel'
 import TransactionHistory     from './components/TransactionHistory'
 import StatusBar              from './components/StatusBar'
 import MatrixRain             from './components/MatrixRain'
@@ -47,6 +48,13 @@ export default function App() {
             {contract.deployedAddress && (
               <InteractionPanel contract={{ ...contract, setStatus: proxySetStatus }} />
             )}
+            <AgentPanel
+              signer={wallet.signer}
+              provider={wallet.provider}
+              ownerAddress={wallet.address}
+              setStatus={proxySetStatus}
+              addToHistory={proxyAddToHistory}
+            />
           </>
         )}
 
