@@ -1,6 +1,6 @@
 import './StatusBar.css'
 
-export default function StatusBar({ status }) {
+export default function StatusBar({ status, onClose }) {
   if (!status) return null
   const typeMap = { info: 'badge-info', success: 'badge-success', error: 'badge-error', warning: 'badge-warning' }
   return (
@@ -9,6 +9,11 @@ export default function StatusBar({ status }) {
         {status.type.toUpperCase()}
       </span>
       <span className="statusbar-msg">{status.message}</span>
+      {onClose && (
+        <button className="statusbar-close" onClick={onClose} aria-label="Close">
+          ×
+        </button>
+      )}
     </div>
   )
 }

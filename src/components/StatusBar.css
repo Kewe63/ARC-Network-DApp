@@ -6,7 +6,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -15,6 +15,29 @@
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   animation: slideUp 0.2s ease;
   z-index: 100;
+}
+.statusbar-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.statusbar-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 .statusbar-msg {
   font-size: 0.875rem;

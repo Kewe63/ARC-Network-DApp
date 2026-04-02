@@ -75,7 +75,7 @@ export default function App() {
         <TerminalLog logs={logs} onClear={clearLogs} />
       </main>
 
-      {contract.status && <StatusBar status={contract.status} />}
+      {contract.status && <StatusBar status={contract.status} onClose={() => proxySetStatus(null)} />}
     </div>
   )
 }
