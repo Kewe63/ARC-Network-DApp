@@ -8,17 +8,17 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
     jobs, loadingJobs, fetchMyJobs, createJob, setBudget, fundJob, submitJob, completeJob
   } = useERC8183(signer, address)
   
-  const [activeTab, setActiveTab] = useState('list') // 'list' | 'create'
+  const [activeTab, setActiveTab] = useState('list') 
   
-  // Create Job States
+  // Action States
+  const [jobIdInput, setJobIdInput] = useState('')
   const [providerInput, setProviderInput] = useState('')
   const [descInput, setDescInput] = useState('')
   const [hoursInput, setHoursInput] = useState('24')
-
-  // Action States
-  const [budgetAmt, setBudgetAmt] = useState({})
-  const [deliverable, setDeliverable] = useState({})
-  const [reason, setReason] = useState({})
+  
+  const [budgetAmt, setBudgetAmt] = useState('')
+  const [deliverableStr, setDeliverableStr] = useState('')
+  const [reasonStr, setReasonStr] = useState('')
 
   useEffect(() => {
     if (signer && address) {
@@ -34,20 +34,18 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
       const receipt = await createJob(providerInput, descInput, Number(hoursInput))
       addToHistory({ type: 'Create Job', hash: receipt.hash })
       setStatus({ type: 'success', message: 'Job created successfully!' })
-      setProviderInput('')
-      setDescInput('')
-      setActiveTab('list')
       fetchMyJobs()
+      setActiveTab('list')
     } catch (err) {
       setStatus({ type: 'error', message: err.message })
     }
   }
 
-  const handleSetBudget = async (id) => {
+  const handleSetBudget = async () => {
     try {
-      setStatus({ type: 'info', message: `Setting budget for job ${id}...` })
-      const amt = (Number(budgetAmt[id] || 0) * 1e6).toString()
-      const receipt = await setBudget(id, amt)
+      setStatus({ type: 'info', message: `Setting budget for job ${jobIdInput}...` })
+      const amt = (Number(budgetAmt || 0) * 1e6).toString()
+      const receipt = await setBudget(jobIdInput, amt)
       addToHistory({ type: 'Set Budget', hash: receipt.hash })
       setStatus({ type: 'success', message: 'Budget set!' })
       fetchMyJobs()
@@ -56,10 +54,11 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
     }
   }
 
-  const handleFund = async (id, budgetBigInt) => {
+  const handleFund = async () => {
     try {
-      setStatus({ type: 'info', message: `Funding job ${id}...` })
-      const receipt = await fundJob(id, budgetBigInt)
+      setStatus({ type: 'info', message: `Funding job ${jobIdInput}...` })
+      const amt = (Number(budgetAmt || 0) * 1e6).toString()
+      const receipt = await fundJob(jobIdInput, amt)
       addToHistory({ type: 'Fund Job', hash: receipt.hash })
       setStatus({ type: 'success', message: 'Job funded!' })
       fetchMyJobs()
@@ -68,10 +67,10 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
     }
   }
 
-  const handleSubmit = async (id) => {
+  const handleSubmit = async () => {
     try {
       setStatus({ type: 'info', message: `Submitting deliverable...` })
-      const receipt = await submitJob(id, deliverable[id] || 'default-deliverable')
+      const receipt = await submitJob(jobIdInput, deliverableStr || 'default-deliverable')
       addToHistory({ type: 'Submit Deliverable', hash: receipt.hash })
       setStatus({ type: 'success', message: 'Deliverable submitted!' })
       fetchMyJobs()
@@ -80,10 +79,10 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
     }
   }
 
-  const handleComplete = async (id) => {
+  const handleComplete = async () => {
     try {
       setStatus({ type: 'info', message: `Completing job...` })
-      const receipt = await completeJob(id, reason[id] || 'work-approved')
+      const receipt = await completeJob(jobIdInput, reasonStr || 'work-approved')
       addToHistory({ type: 'Complete Job', hash: receipt.hash })
       setStatus({ type: 'success', message: 'Job completed!' })
       fetchMyJobs()
@@ -92,77 +91,33 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
     }
   }
 
+  // A helper auto-fill job ID button for list view
+  const fillJobIdAndGoTo = (id, tab) => {
+    setJobIdInput(id.toString());
+    setActiveTab(tab);
+  }
+
   return (
     <section className="card">
       <h2>ERC-8183 Jobs</h2>
 
       <div className="deploy-tabs">
-        <button
-          className={`tab-btn ${activeTab === 'list' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('list')}
-        >
-          My Created Jobs
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'create' ? 'tab-active' : ''}`}
-          onClick={() => setActiveTab('create')}
-        >
-          Create Job
-        </button>
+        <button className={`tab-btn ${activeTab === 'list' ? 'tab-active' : ''}`} onClick={() => setActiveTab('list')}>MY JOBS</button>
+        <button className={`tab-btn ${activeTab === 'create' ? 'tab-active' : ''}`} onClick={() => setActiveTab('create')}>CREATE</button>
+        <button className={`tab-btn ${activeTab === 'budget' ? 'tab-active' : ''}`} onClick={() => setActiveTab('budget')}>SET BUDGET</button>
+        <button className={`tab-btn ${activeTab === 'fund' ? 'tab-active' : ''}`} onClick={() => setActiveTab('fund')}>FUND</button>
+        <button className={`tab-btn ${activeTab === 'submit' ? 'tab-active' : ''}`} onClick={() => setActiveTab('submit')}>SUBMIT</button>
+        <button className={`tab-btn ${activeTab === 'complete' ? 'tab-active' : ''}`} onClick={() => setActiveTab('complete')}>COMPLETE</button>
       </div>
 
       <div className="deploy-body">
-        {activeTab === 'create' && (
-          <div className="deploy-form">
-            <span className="deploy-desc">Create a new Agentic Commerce job</span>
-
-            <div className="form-field">
-              <span className="label">Provider Address</span>
-              <input
-                className="input"
-                placeholder="0x..."
-                value={providerInput}
-                onChange={e => setProviderInput(e.target.value)}
-              />
-            </div>
-
-            <div className="form-field">
-              <span className="label">Description</span>
-              <input
-                className="input"
-                placeholder="Brief job description"
-                value={descInput}
-                onChange={e => setDescInput(e.target.value)}
-              />
-            </div>
-
-            <div className="form-field">
-              <span className="label">Expiration (Hours)</span>
-              <input
-                className="input"
-                type="number"
-                value={hoursInput}
-                onChange={e => setHoursInput(e.target.value)}
-              />
-            </div>
-
-            <button
-              className="btn btn-primary"
-              onClick={handleCreate}
-              disabled={!providerInput || !descInput}
-            >
-              CREATE_JOB()
-            </button>
-          </div>
-        )}
-
+        
+        {/* --- LIST TAB --- */}
         {activeTab === 'list' && (
           <div className="deploy-form">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span className="deploy-desc">Only jobs created by your current wallet</span>
-              <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={fetchMyJobs}>
-                REFRESH
-              </button>
+              <span className="deploy-desc">// Only jobs created by your current wallet</span>
+              <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={fetchMyJobs}>REFRESH</button>
             </div>
 
             {loadingJobs ? (
@@ -177,82 +132,17 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
                       <span>#{job.id} <span className={`badge ${job.status === 3 ? 'badge-success' : 'badge-info'}`}>{STATUS_NAMES[job.status]}</span></span>
                     </div>
                     <div className="mono" style={{ fontSize: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>
-                      <div>Provider: <span className="address">{job.provider.substring(0,12)}...</span> <CopyButton text={job.provider}/></div>
+                      <div>Provider: <span className="address">{job.provider.substring(0,10)}...</span> <CopyButton text={job.provider}/></div>
                       <div>Budget: {formatUnits(job.budget || 0n, 6)} USDC</div>
                       <div style={{ color: 'var(--text-primary)' }}>Desc: {job.description}</div>
                     </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border)' }}>
-                      {job.status === 0 && (
-                        <div className="input-row">
-                          <input 
-                            className="input" 
-                            placeholder="Budget (USDC)" 
-                            type="number" 
-                            onChange={e => setBudgetAmt({...budgetAmt, [job.id]: e.target.value})} 
-                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
-                          />
-                          <button 
-                            className="btn btn-primary" 
-                            onClick={() => handleSetBudget(job.id)}
-                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
-                            title={job.provider.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Provider (Sağlayıcı) bütçe belirleyebilir'}
-                          >
-                            SET_BUDGET
-                          </button>
-                        </div>
-                      )}
-
-                      {job.status === 0 && (job.budget > 0 || job.budget > 0n) && (
-                        <button 
-                          className="btn btn-primary" 
-                          onClick={() => handleFund(job.id, job.budget)}
-                          disabled={job.client.toLowerCase() !== (address || '').toLowerCase()}
-                          title={job.client.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Client (İşi Veren) fonlama yapabilir'}
-                        >
-                          FUND_ESCROW()
-                        </button>
-                      )}
-                      
-                      {job.status === 1 && (
-                        <div className="input-row">
-                          <input 
-                            className="input" 
-                            placeholder="Deliverable Info" 
-                            onChange={e => setDeliverable({...deliverable, [job.id]: e.target.value})} 
-                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
-                          />
-                          <button 
-                            className="btn btn-primary" 
-                            onClick={() => handleSubmit(job.id)}
-                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
-                            title={job.provider.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Provider (Sağlayıcı) teslim edebilir'}
-                          >
-                            SUBMIT
-                          </button>
-                        </div>
-                      )}
-
-                      {job.status === 2 && (
-                        <div className="input-row">
-                          <input 
-                            className="input" 
-                            placeholder="Approval Reason" 
-                            onChange={e => setReason({...reason, [job.id]: e.target.value})} 
-                            disabled={job.evaluator.toLowerCase() !== (address || '').toLowerCase()}
-                          />
-                          <button 
-                            className="btn btn-primary" 
-                            onClick={() => handleComplete(job.id)}
-                            disabled={job.evaluator.toLowerCase() !== (address || '').toLowerCase()}
-                            title={job.evaluator.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Evaluator (Onaylayıcı) tamamlama yapabilir'}
-                          >
-                            COMPLETE
-                          </button>
-                        </div>
-                      )}
-                      
-                      {job.status === 3 && <span className="mono status-success" style={{fontSize: '0.7rem', padding: '0.4em 0.8em'}}>JOB_COMPLETED</span>}
+                    {/* Fast Navigation Buttons */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border)' }}>
+                       <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', width: '100%' }}>// Quick Actions</span>
+                       <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={() => fillJobIdAndGoTo(job.id, 'budget')}>Set Budget</button>
+                       <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={() => { fillJobIdAndGoTo(job.id, 'fund'); setBudgetAmt(formatUnits(job.budget, 6)); }}>Fund</button>
+                       <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={() => fillJobIdAndGoTo(job.id, 'submit')}>Submit</button>
+                       <button className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.65rem' }} onClick={() => fillJobIdAndGoTo(job.id, 'complete')}>Complete</button>
                     </div>
                   </div>
                 ))}
@@ -260,6 +150,91 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
             )}
           </div>
         )}
+
+        {/* --- CREATE JOB TAB --- */}
+        {activeTab === 'create' && (
+          <div className="deploy-form">
+            <span className="deploy-desc">Create a new Agentic Commerce job</span>
+            <div className="form-field">
+              <span className="label">Provider Address</span>
+              <input className="input" placeholder="0x..." value={providerInput} onChange={e => setProviderInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Description</span>
+              <input className="input" placeholder="Brief job description" value={descInput} onChange={e => setDescInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Expiration (Hours)</span>
+              <input className="input" type="number" value={hoursInput} onChange={e => setHoursInput(e.target.value)} />
+            </div>
+            <button className="btn btn-primary" onClick={handleCreate} disabled={!providerInput || !descInput}>CREATE_JOB()</button>
+          </div>
+        )}
+
+        {/* --- SET BUDGET TAB --- */}
+        {activeTab === 'budget' && (
+          <div className="deploy-form">
+            <span className="deploy-desc">Set budget for an existing job (Must be the Provider)</span>
+            <div className="form-field">
+              <span className="label">Job ID</span>
+              <input className="input" type="number" placeholder="Enter Job ID" value={jobIdInput} onChange={e => setJobIdInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Budget Amount (USDC)</span>
+              <input className="input" type="number" placeholder="e.g. 5" value={budgetAmt} onChange={e => setBudgetAmt(e.target.value)} />
+            </div>
+            <button className="btn btn-primary" onClick={handleSetBudget} disabled={!jobIdInput || !budgetAmt}>SET_BUDGET()</button>
+          </div>
+        )}
+
+        {/* --- FUND ESCROW TAB --- */}
+        {activeTab === 'fund' && (
+          <div className="deploy-form">
+            <span className="deploy-desc">Approve and Fund a job (Must be the Client)</span>
+            <div className="form-field">
+              <span className="label">Job ID</span>
+              <input className="input" type="number" placeholder="Enter Job ID" value={jobIdInput} onChange={e => setJobIdInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Total Amount to Approve (USDC)</span>
+              <input className="input" type="number" placeholder="Must match the set budget..." value={budgetAmt} onChange={e => setBudgetAmt(e.target.value)} />
+            </div>
+            <button className="btn btn-primary" onClick={handleFund} disabled={!jobIdInput || !budgetAmt}>FUND_ESCROW()</button>
+          </div>
+        )}
+
+        {/* --- SUBMIT DELIVERABLE TAB --- */}
+        {activeTab === 'submit' && (
+          <div className="deploy-form">
+            <span className="deploy-desc">Submit deliverable hash for a funded job (Must be the Provider)</span>
+            <div className="form-field">
+              <span className="label">Job ID</span>
+              <input className="input" type="number" placeholder="Enter Job ID" value={jobIdInput} onChange={e => setJobIdInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Deliverable Information</span>
+              <input className="input" placeholder="e.g. github-link-or-hash" value={deliverableStr} onChange={e => setDeliverableStr(e.target.value)} />
+            </div>
+            <button className="btn btn-primary" onClick={handleSubmit} disabled={!jobIdInput || !deliverableStr}>SUBMIT_DELIVERABLE()</button>
+          </div>
+        )}
+
+        {/* --- COMPLETE JOB TAB --- */}
+        {activeTab === 'complete' && (
+          <div className="deploy-form">
+            <span className="deploy-desc">Approve the deliverable and release funds (Must be Evaluator/Client)</span>
+            <div className="form-field">
+              <span className="label">Job ID</span>
+              <input className="input" type="number" placeholder="Enter Job ID" value={jobIdInput} onChange={e => setJobIdInput(e.target.value)} />
+            </div>
+            <div className="form-field">
+              <span className="label">Approval Reason</span>
+              <input className="input" placeholder="e.g. work-approved" value={reasonStr} onChange={e => setReasonStr(e.target.value)} />
+            </div>
+            <button className="btn btn-primary" onClick={handleComplete} disabled={!jobIdInput || !reasonStr}>COMPLETE_JOB()</button>
+          </div>
+        )}
+
       </div>
     </section>
   )
