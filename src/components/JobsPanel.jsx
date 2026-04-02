@@ -183,35 +183,76 @@ export default function JobsPanel({ signer, address, setStatus, addToHistory }) 
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border)' }}>
-                      {/* Note: Provider can set budget, but you are the client in this list. 
-                          So usually we only see FUND and COMPLETE buttons here for our own jobs. 
-                          However, if this same wallet is ALSo the provider, they can set budget and submit. */}
-                      {job.status === 0 && job.provider.toLowerCase() === (address || '').toLowerCase() && (
+                      {job.status === 0 && (
                         <div className="input-row">
-                          <input className="input" placeholder="Budget (USDC)" type="number" onChange={e => setBudgetAmt({...budgetAmt, [job.id]: e.target.value})} />
-                          <button className="btn btn-primary" onClick={() => handleSetBudget(job.id)}>SET_BUDGET</button>
+                          <input 
+                            className="input" 
+                            placeholder="Budget (USDC)" 
+                            type="number" 
+                            onChange={e => setBudgetAmt({...budgetAmt, [job.id]: e.target.value})} 
+                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
+                          />
+                          <button 
+                            className="btn btn-primary" 
+                            onClick={() => handleSetBudget(job.id)}
+                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
+                            title={job.provider.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Provider (Sağlayıcı) bütçe belirleyebilir'}
+                          >
+                            SET_BUDGET
+                          </button>
                         </div>
                       )}
 
-                      {job.status === 0 && job.client.toLowerCase() === (address || '').toLowerCase() && job.budget > 0n && (
-                        <button className="btn btn-primary" onClick={() => handleFund(job.id, job.budget)}>FUND_ESCROW()</button>
+                      {job.status === 0 && (job.budget > 0 || job.budget > 0n) && (
+                        <button 
+                          className="btn btn-primary" 
+                          onClick={() => handleFund(job.id, job.budget)}
+                          disabled={job.client.toLowerCase() !== (address || '').toLowerCase()}
+                          title={job.client.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Client (İşi Veren) fonlama yapabilir'}
+                        >
+                          FUND_ESCROW()
+                        </button>
                       )}
                       
-                      {job.status === 1 && job.provider.toLowerCase() === (address || '').toLowerCase() && (
+                      {job.status === 1 && (
                         <div className="input-row">
-                          <input className="input" placeholder="Deliverable Info" onChange={e => setDeliverable({...deliverable, [job.id]: e.target.value})} />
-                          <button className="btn btn-primary" onClick={() => handleSubmit(job.id)}>SUBMIT</button>
+                          <input 
+                            className="input" 
+                            placeholder="Deliverable Info" 
+                            onChange={e => setDeliverable({...deliverable, [job.id]: e.target.value})} 
+                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
+                          />
+                          <button 
+                            className="btn btn-primary" 
+                            onClick={() => handleSubmit(job.id)}
+                            disabled={job.provider.toLowerCase() !== (address || '').toLowerCase()}
+                            title={job.provider.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Provider (Sağlayıcı) teslim edebilir'}
+                          >
+                            SUBMIT
+                          </button>
                         </div>
                       )}
 
-                      {job.status === 2 && job.evaluator.toLowerCase() === (address || '').toLowerCase() && (
+                      {job.status === 2 && (
                         <div className="input-row">
-                          <input className="input" placeholder="Approval Reason" onChange={e => setReason({...reason, [job.id]: e.target.value})} />
-                          <button className="btn btn-primary" onClick={() => handleComplete(job.id)}>COMPLETE</button>
+                          <input 
+                            className="input" 
+                            placeholder="Approval Reason" 
+                            onChange={e => setReason({...reason, [job.id]: e.target.value})} 
+                            disabled={job.evaluator.toLowerCase() !== (address || '').toLowerCase()}
+                          />
+                          <button 
+                            className="btn btn-primary" 
+                            onClick={() => handleComplete(job.id)}
+                            disabled={job.evaluator.toLowerCase() !== (address || '').toLowerCase()}
+                            title={job.evaluator.toLowerCase() === (address || '').toLowerCase() ? '' : 'Sadece Evaluator (Onaylayıcı) tamamlama yapabilir'}
+                          >
+                            COMPLETE
+                          </button>
                         </div>
                       )}
                       
-                      {(job.status === 3) && <span className="mono status-success" style={{fontSize: '0.7rem', padding: '0.4em 0.8em'}}>JOB_COMPLETED</span>}
+                      {job.status === 3 && <span className="mono status-success" style={{fontSize: '0.7rem', padding: '0.4em 0.8em'}}>JOB_COMPLETED</span>}
                     </div>
                   </div>
                 ))}
