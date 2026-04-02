@@ -6,6 +6,7 @@ import WalletPanel            from './components/WalletPanel'
 import DeployPanel            from './components/DeployPanel'
 import InteractionPanel       from './components/InteractionPanel'
 import AgentPanel             from './components/AgentPanel'
+import JobsPanel              from './components/JobsPanel'
 import TransactionHistory     from './components/TransactionHistory'
 import StatusBar              from './components/StatusBar'
 import MatrixRain             from './components/MatrixRain'
@@ -52,6 +53,12 @@ export default function App() {
               signer={wallet.signer}
               provider={wallet.provider}
               ownerAddress={wallet.address}
+              setStatus={proxySetStatus}
+              addToHistory={proxyAddToHistory}
+            />
+            <JobsPanel
+              signer={wallet.signer}
+              address={wallet.address}
               setStatus={proxySetStatus}
               addToHistory={proxyAddToHistory}
             />
