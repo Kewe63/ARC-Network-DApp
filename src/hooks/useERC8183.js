@@ -55,12 +55,11 @@ export function useERC8183(signer, address) {
     setLoadingJobs(false)
   }, [signer, address])
 
-  const createJob = async (providerAddress, description, expirationHours) => {
+  const createJob = async (providerAddress, evaluatorAddress, description, expirationHours) => {
     if (!signer) throw new Error("No wallet connected")
     const contract = new Contract(AGENTIC_COMMERCE_ADDRESS, AGENTIC_COMMERCE_ABI, signer)
     const expiredAt = Math.floor(Date.now() / 1000) + (expirationHours * 3600)
-    // We set evaluator as ourselves (the creator)
-    const tx = await contract.createJob(providerAddress, address, expiredAt, description, ethers.ZeroAddress)
+    const tx = await contract.createJob(providerAddress, evaluatorAddress || address, expiredAt, description, ethers.ZeroAddress)
     return await tx.wait()
   }
 

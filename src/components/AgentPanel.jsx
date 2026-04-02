@@ -249,6 +249,10 @@ export default function AgentPanel({ signer, provider, ownerAddress, setStatus, 
         {step === 'reputation' && (
           <div className="deploy-form">
             <p className="deploy-desc">{t('agentReputationDesc')}</p>
+            <p style={{ fontSize: '0.7rem', color: 'var(--status-warning)', marginBottom: '1rem' }}>
+              // {t('wrongNetwork').includes('?') ? '' : 'Tip: '} 
+              {t('en') === 'tr' ? 'Not: Kendi agentinize puan veremezsiniz (Self-feedback not allowed).' : 'Note: You cannot rate your own agent (Self-feedback not allowed).'}
+            </p>
 
             <div className="form-field">
               <label className="label">{t('agentId')}</label>
