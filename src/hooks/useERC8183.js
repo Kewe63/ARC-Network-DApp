@@ -42,7 +42,7 @@ export function useERC8183(signer, address) {
           description: job.description,
           budget: job.budget, // Keep as BigInt
           expiredAt: job.expiredAt.toString(),
-          status: job.status,
+          status: Number(job.status),
           hook: job.hook
         }
       })
